@@ -28,12 +28,12 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserDto createUser(UserDto userDto) {
-        User user = userRepository.findByEmail(userDto.getEmail()).get();
-        if (user.getEmail() == null) {
+        User user = userRepository.findByEmail(userDto.getEmail());
+        if (user == null) {
+            User newUser = new User();
             Role role = roleRepository.findByRole("USER").get();
             List<Role> roleEntities = new ArrayList<>();
             roleEntities.add(role);
-            User newUser = new User();
             newUser.setActive(true);
             newUser.setEmail(userDto.getEmail());
             newUser.setFirstName(userDto.getFirstName());
@@ -60,17 +60,19 @@ public class UserService {
     }
 
     public User findByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(String.format("user with email = %s not found", email)));
+        User user = userRepository.findByEmail(email);
         if (user == null) {
             log.warn(String.format("user with email = %s not found", email));
+            throw new NotFoundException(String.format("user with email = %s not found", email));
         }
         return user;
     }
 
     public User updateUserPassword(UserDto userDto) {
-        User user = userRepository.findByEmail(userDto.getEmail()).orElseThrow(() -> new NotFoundException(String.format("user with email = %s not found", userDto.getEmail())));
+        User user = userRepository.findByEmail(userDto.getEmail());
         if (user == null) {
             log.warn(String.format("user with email = %s not found", userDto.getEmail()));
+            throw new NotFoundException(String.format("user with email = %s not found", userDto.getEmail()));
         } else {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
             userRepository.save(user);
