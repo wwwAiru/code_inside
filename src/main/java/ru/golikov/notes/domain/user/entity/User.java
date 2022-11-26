@@ -1,7 +1,9 @@
 package ru.golikov.notes.domain.user.entity;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.golikov.notes.domain.note.entity.Note;
 import ru.golikov.notes.domain.role.entity.Role;
 
@@ -11,7 +13,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class User {
     @Id
@@ -43,11 +46,11 @@ public class User {
     @Column(name = "is_active")
     private boolean isActive;
 
+    @OneToMany(mappedBy = "user")
+    private List<Note> noteEntities;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private List<Role> roles;
-
-    @OneToMany(mappedBy = "user")
-    private List<Note> noteEntities;
 }

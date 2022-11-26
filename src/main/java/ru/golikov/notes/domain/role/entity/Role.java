@@ -1,6 +1,7 @@
 package ru.golikov.notes.domain.role.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import ru.golikov.notes.domain.user.entity.User;
 
 import javax.persistence.*;
@@ -9,7 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "roles")
-@Data
+@Getter
+@Setter
 public class Role {
 
     @Id
