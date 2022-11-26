@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import ru.golikov.notes.domain.error.exception.JwtAuthenticationException;
 import ru.golikov.notes.domain.role.entity.Role;
 
 import javax.annotation.PostConstruct;
