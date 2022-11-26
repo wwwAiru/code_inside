@@ -1,4 +1,4 @@
-package ru.golikov.notes.dto;
+package ru.golikov.notes.domain.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;

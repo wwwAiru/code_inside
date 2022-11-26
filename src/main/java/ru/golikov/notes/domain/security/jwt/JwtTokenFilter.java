@@ -1,4 +1,4 @@
-package ru.golikov.notes.security.jwt;
+package ru.golikov.notes.domain.security.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;

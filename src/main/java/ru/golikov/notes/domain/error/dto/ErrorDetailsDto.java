@@ -1,4 +1,4 @@
-package ru.golikov.notes.error.dto;
+package ru.golikov.notes.domain.error.dto;
 
 import lombok.Builder;
 import lombok.Data;

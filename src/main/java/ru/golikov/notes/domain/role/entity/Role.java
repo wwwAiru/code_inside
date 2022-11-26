@@ -1,6 +1,7 @@
-package ru.golikov.notes.entity;
+package ru.golikov.notes.domain.role.entity;
 
 import lombok.Data;
+import ru.golikov.notes.domain.user.entity.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package ru.golikov.notes.dto;
+package ru.golikov.notes.domain.note.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
