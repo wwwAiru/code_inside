@@ -1,12 +1,29 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/notes
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:postgres}
+    url: jdbc:postgresql://localhost:5432/notes?serverTimezone=UTC
+    username: postgres
+    password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQL95Dialect
     show-sql: false
+  liquibase:
+    change-log: classpath:liquibase/create-changelog-1.0.xml
+    url: jdbc:postgresql://localhost:5432/notes?serverTimezone=UTC
+    user: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    enabled: true
+
+endpoints:
+  register: /auth/register
+  login: /auth/login
+  admin: /admin/**
+
+jwt:
+  token:
+    secret: ${TOKEN_SECRET:qwerty123}
+    expired: ${TOKEN_EXPIRED:36000000}
