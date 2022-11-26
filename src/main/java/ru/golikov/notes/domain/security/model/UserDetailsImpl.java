@@ -1,37 +1,30 @@
-package ru.golikov.notes.security.jwt;
+package ru.golikov.notes.domain.security.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-@AllArgsConstructor
-public class JwtUser implements UserDetails {
+@Builder
+public class UserDetailsImpl implements UserDetails {
 
     private Long id;
 
-    @JsonProperty("first_name")
     private String firstName;
 
-    @JsonProperty("last_name")
     private String lastName;
 
-    @JsonProperty("middle_name")
     private String middleName;
 
     private String email;
 
-    @JsonIgnore
     private String password;
 
-    @JsonProperty("create_at")
     private LocalDateTime createAt;
 
-    @JsonProperty("update_at")
     private LocalDateTime updateAt;
 
     private boolean isActive;
@@ -68,12 +61,13 @@ public class JwtUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
+    @JsonIgnore
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
