@@ -15,6 +15,7 @@ import ru.golikov.notes.domain.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -31,7 +32,7 @@ public class UserService {
         User user = userRepository.findByEmail(userDto.getEmail());
         if (user == null) {
             User newUser = new User();
-            Role role = roleRepository.findByRole("USER").get();
+            Role role = roleRepository.findByRole("ROLE_USER").get();
             List<Role> roleEntities = new ArrayList<>();
             roleEntities.add(role);
             newUser.setActive(true);
@@ -48,6 +49,20 @@ public class UserService {
         } else {
             throw new UserRegistrationException(String.format("User with email: %s already exists", userDto.getEmail()));
         }
+    }
+
+    public List<UserDto> findAllUsers() {
+        return userRepository.findAll().stream()
+                .map(user -> UserDto.builder()
+                        .id(user.getId())
+                        .email(user.getEmail())
+                        .firstName(user.getFirstName())
+                        .lastName(user.getLastName())
+                        .middleName(user.getMiddleName())
+                        .createAt(user.getCreateAt())
+                        .updateAt(user.getUpdateAt())
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public User findById(Long id) {
