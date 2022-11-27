@@ -1,6 +1,5 @@
 package ru.golikov.notes.domain.security.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -64,7 +63,6 @@ public class UserDetailsImpl implements UserDetails {
         return authorities;
     }
 
-    @JsonIgnore
     @Override
     public String getPassword() {
         return password;
@@ -75,25 +73,21 @@ public class UserDetailsImpl implements UserDetails {
         return email;
     }
 
-    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
-    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return isActive;
