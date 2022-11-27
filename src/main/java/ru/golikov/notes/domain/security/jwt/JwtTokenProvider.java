@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -46,14 +45,7 @@ public class JwtTokenProvider {
 
     public String createToken(User user) {
         Claims claims = Jwts.claims().setSubject(user.getEmail());
-        Map.of("id", user.getId(),
-                "first_name", user.getFirstName(),
-                "last_name", user.getLastName(),
-                "middle_name", user.getMiddleName(),
-                "create_at", user.getCreateAt(),
-                "update_at", user.getUpdateAt(),
-                "roles", getStringRoles(user.getRoles())
-        );
+        claims.put("roles", getStringRoles(user.getRoles()));
         Date date = new Date();
         Date validity = new Date(date.getTime() + expireMills);
         return Jwts.builder()
@@ -75,7 +67,7 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader("Authorization");
-        if (token != null && token.startsWith("Bearer_")) {
+        if (token != null && token.startsWith("Bearer ")) {
             return token.substring(7);
         }
         return null;
