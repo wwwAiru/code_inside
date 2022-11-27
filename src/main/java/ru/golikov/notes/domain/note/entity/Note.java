@@ -1,6 +1,8 @@
 package ru.golikov.notes.domain.note.entity;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.golikov.notes.domain.user.entity.User;
 
 import javax.persistence.*;
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "notes")
 @NoArgsConstructor
+@Getter
+@Setter
 public class Note {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
