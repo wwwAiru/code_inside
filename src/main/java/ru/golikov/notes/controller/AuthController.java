@@ -1,4 +1,4 @@
-package ru.golikov.notes.domain.security.controller;
+package ru.golikov.notes.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
