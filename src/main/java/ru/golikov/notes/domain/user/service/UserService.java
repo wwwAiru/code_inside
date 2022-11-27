@@ -27,7 +27,7 @@ public class UserService {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserDto createUser(UserDto userDto) {
+    public void createUser(UserDto userDto) {
         User user = userRepository.findByEmail(userDto.getEmail());
         if (user == null) {
             User newUser = new User();
@@ -48,7 +48,6 @@ public class UserService {
         } else {
             throw new UserRegistrationException(String.format("User with email: %s already exists", userDto.getEmail()));
         }
-        return userDto;
     }
 
     public User findById(Long id) {
