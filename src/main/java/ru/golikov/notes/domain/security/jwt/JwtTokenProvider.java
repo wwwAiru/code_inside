@@ -56,10 +56,6 @@ public class JwtTokenProvider {
                 .compact();
     }
 
-    public String getUserEmail(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
-    }
-
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(getUserEmail(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
@@ -80,6 +76,10 @@ public class JwtTokenProvider {
         } catch (JwtException | IllegalArgumentException e) {
             throw new JwtAuthenticationException("JWT token expire or invalid");
         }
+    }
+
+    private String getUserEmail(String token) {
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
     private List<String> getStringRoles(List<Role> roles) {
