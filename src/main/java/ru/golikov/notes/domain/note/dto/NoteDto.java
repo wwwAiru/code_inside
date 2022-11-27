@@ -1,13 +1,15 @@
 package ru.golikov.notes.domain.note.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class NoteDto {
 
     private Long id;
@@ -17,10 +19,11 @@ public class NoteDto {
     private String body;
 
     @JsonProperty("create_at")
-    private LocalDate createAt;
+    private LocalDateTime createAt;
 
     @JsonProperty("update_at")
-    private LocalDate updateAt;
+    private LocalDateTime updateAt;
 
-    private Long userId;
+    @JsonProperty("author")
+    private String email;
 }
