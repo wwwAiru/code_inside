@@ -1,6 +1,8 @@
 package ru.golikov.notes.domain.util;
 
+import org.springframework.security.core.GrantedAuthority;
 import ru.golikov.notes.domain.role.entity.Role;
+import ru.golikov.notes.domain.security.model.UserDetailsImpl;
 import ru.golikov.notes.domain.user.dto.UserDto;
 import ru.golikov.notes.domain.user.entity.User;
 
@@ -27,5 +29,21 @@ public class UserMapper {
         return users.stream()
                 .map(UserMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    public static UserDto toDto(UserDetailsImpl userDetails) {
+        return UserDto.builder()
+                .id(userDetails.getId())
+                .email(userDetails.getEmail())
+                .firstName(userDetails.getFirstName())
+                .lastName(userDetails.getLastName())
+                .middleName(userDetails.getMiddleName())
+                .createAt(userDetails.getCreateAt())
+                .updateAt(userDetails.getUpdateAt())
+                .isActive(userDetails.isEnabled())
+                .roles(userDetails.getAuthorities().stream()
+                        .map(GrantedAuthority::getAuthority)
+                        .collect(Collectors.toList()))
+                .build();
     }
 }
