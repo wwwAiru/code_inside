@@ -1,6 +1,5 @@
 package ru.golikov.notes.domain.user.entity;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

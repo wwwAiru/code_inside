@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.golikov.notes.domain.error.dto.ErrorDetailsDto;
-import ru.golikov.notes.domain.error.exception.JwtAuthenticationException;
 import ru.golikov.notes.domain.error.exception.NotFoundException;
 import ru.golikov.notes.domain.error.exception.UserRegistrationException;
 
