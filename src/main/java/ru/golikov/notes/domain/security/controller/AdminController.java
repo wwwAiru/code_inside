@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.golikov.notes.domain.user.dto.UserDto;
 import ru.golikov.notes.domain.user.service.UserService;
+import ru.golikov.notes.domain.util.UserMapper;
 
 import java.util.List;
 
@@ -27,6 +28,6 @@ public class AdminController {
 
     @GetMapping("/user")
     public ResponseEntity<UserDto> getUserById(@RequestParam Long id) {
-        return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(UserMapper.toDto(userService.findById(id)), HttpStatus.OK);
     }
 }
