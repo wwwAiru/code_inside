@@ -27,8 +27,8 @@ public class AuthService {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
             User user = userService.findByEmail(loginDto.getEmail());
             return TokenDto.builder()
-                    .email(loginDto.getEmail())
-                    .token(jwtTokenProvider.createToken(user.getEmail(), user.getRoles()))
+                    .email(user.getEmail())
+                    .token(jwtTokenProvider.createToken(user))
                     .build();
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid email or password");

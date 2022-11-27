@@ -12,12 +12,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.golikov.notes.domain.error.exception.JwtAuthenticationException;
 import ru.golikov.notes.domain.role.entity.Role;
+import ru.golikov.notes.domain.user.entity.User;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -42,16 +44,23 @@ public class JwtTokenProvider {
         secret = Base64.getEncoder().encodeToString(secret.getBytes());
     }
 
-    public String createToken(String email, List<Role> roles) {
-        Claims claims = Jwts.claims().setSubject(email);
-        claims.put("roles", getStringRoles(roles));
+    public String createToken(User user) {
+        Claims claims = Jwts.claims().setSubject(user.getEmail());
+        Map.of("id", user.getId(),
+                "first_name", user.getFirstName(),
+                "last_name", user.getLastName(),
+                "middle_name", user.getMiddleName(),
+                "create_at", user.getCreateAt(),
+                "update_at", user.getUpdateAt(),
+                "roles", getStringRoles(user.getRoles())
+        );
         Date date = new Date();
         Date validity = new Date(date.getTime() + expireMills);
         return Jwts.builder()
                 .setClaims(claims)
                 .setIssuedAt(date)
                 .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
     }
 
