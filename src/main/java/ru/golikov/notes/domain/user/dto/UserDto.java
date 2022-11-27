@@ -34,5 +34,8 @@ public class UserDto {
     @JsonProperty("update_at")
     private LocalDateTime updateAt;
 
+    @JsonProperty("is_active")
+    private boolean isActive;
+
     private List<String> roles;
 }
