@@ -46,4 +46,11 @@ public class UserMapper {
                         .collect(Collectors.toList()))
                 .build();
     }
+
+    public static User toUser(UserDetailsImpl userDetails) {
+        User user = new User();
+        user.setId(userDetails.getId());
+        user.setEmail(userDetails.getEmail());
+        return user;
+    }
 }
