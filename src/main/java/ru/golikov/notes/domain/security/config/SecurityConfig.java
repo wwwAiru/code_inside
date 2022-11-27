@@ -18,6 +18,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${endpoints.auth}")
     private String authUrl;
 
+    @Value("${endpoints.notes}")
+    private String notesUrl;
+
     @Value("${endpoints.admin}")
     private String adminUrl;
 
@@ -39,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(authUrl).permitAll()
                 .antMatchers(adminUrl).hasRole("ADMIN")
+                .antMatchers(notesUrl).hasAnyRole("ADMIN","USER")
                 .anyRequest().authenticated()
                 .and()
                 .apply(new JwtConfigurer(jwtTokenProvider));
