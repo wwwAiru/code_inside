@@ -66,12 +66,21 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public User findById(Long id) {
+    public UserDto findById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("user with id = %d not found", id)));
         if (user == null) {
             log.warn(String.format("user with id = %d not found", id));
         }
-        return user;
+        return UserDto.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .middleName(user.getMiddleName())
+                .createAt(user.getCreateAt())
+                .updateAt(user.getUpdateAt())
+                .roles(user.getRoles().stream().map(Role::getRole).collect(Collectors.toList()))
+                .build();
     }
 
     public User findByEmail(String email) {
