@@ -56,14 +56,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 				.build();
 		return new ResponseEntity<>(errorDetailsDto, HttpStatus.UNAUTHORIZED);
 	}
-
-	@ExceptionHandler(JwtAuthenticationException.class)
-	public ResponseEntity<?> jwtAuthenticationException(JwtAuthenticationException ex, WebRequest request) {
-		ErrorDetailsDto errorDetailsDto = ErrorDetailsDto.builder()
-				.timestamp(new Date())
-				.message(ex.getMessage())
-				.details(request.getDescription(false))
-				.build();
-		return new ResponseEntity<>(errorDetailsDto, HttpStatus.FORBIDDEN);
-	}
 }
