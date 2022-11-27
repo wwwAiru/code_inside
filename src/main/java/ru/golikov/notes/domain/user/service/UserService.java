@@ -61,6 +61,7 @@ public class UserService {
                         .middleName(user.getMiddleName())
                         .createAt(user.getCreateAt())
                         .updateAt(user.getUpdateAt())
+                        .roles(user.getRoles().stream().map(Role::getRole).collect(Collectors.toList()))
                         .build())
                 .collect(Collectors.toList());
     }
