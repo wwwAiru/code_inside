@@ -19,8 +19,7 @@ spring:
     enabled: true
 
 endpoints:
-  register: /auth/register
-  login: /auth/login
+  auth: /auth/**
   admin: /admin/**
 
 jwt:

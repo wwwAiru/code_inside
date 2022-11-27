@@ -15,11 +15,8 @@ import ru.golikov.notes.domain.security.jwt.JwtTokenProvider;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${endpoints.login}")
-    private String loginUrl;
-
-    @Value("${endpoints.register}")
-    private String registerUrl;
+    @Value("${endpoints.auth}")
+    private String authUrl;
 
     @Value("${endpoints.admin}")
     private String adminUrl;
@@ -40,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers(loginUrl, registerUrl).permitAll()
+                .antMatchers(authUrl).permitAll()
                 .antMatchers(adminUrl).hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
