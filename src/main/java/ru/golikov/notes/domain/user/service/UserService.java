@@ -55,22 +55,27 @@ public class UserService {
     }
 
     public UserDto editUser(UserDto userDto) {
-        List<Role> roles = userDto.getRoles().stream()
+        User user = findById(userDto.getId());
+        List<String> stringRoles = userDto.getRoles();
+        if (!CollectionUtils.isEmpty(stringRoles)) {
+        List<Role> roles = stringRoles.stream()
                 .map(roleRepository::findByRole)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
-        User user = findById(userDto.getId());
+            if(!CollectionUtils.isEmpty(stringRoles)) {
+                user.setRoles(roles);
+            }
+        }
+        if (userDto.getPassword() != null) {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        }
         user.setActive(userDto.isActive());
         user.setEmail(userDto.getEmail());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setMiddleName(userDto.getMiddleName());
         user.setUpdateAt(LocalDateTime.now());
-        if(!CollectionUtils.isEmpty(roles)) {
-            user.setRoles(roles);
-        }
         User savedUser = userRepository.save(user);
         return UserMapper.toDto(savedUser);
     }
@@ -80,11 +85,12 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("user with id = %d not found", id)));
-        if (user == null) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
             log.warn(String.format("user with id = %d not found", id));
+            throw new NotFoundException(String.format("user with id = %d not found", id));
         }
-        return user;
+        return user.get();
     }
 
     public User findByEmail(String email) {
@@ -111,7 +117,12 @@ public class UserService {
 
 
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception e) {
+            log.warn(String.format("Can't delete user with id = %d, user not found", id));
+            throw new NotFoundException(String.format("Cant delete user with id = %d, user not found", id));
+        }
         log.info(String.format("user with id = %d deleted", id));
     }
 }
