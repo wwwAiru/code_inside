@@ -12,7 +12,7 @@ import ru.golikov.notes.domain.role.repository.RoleRepository;
 import ru.golikov.notes.domain.user.dto.UserDto;
 import ru.golikov.notes.domain.user.entity.User;
 import ru.golikov.notes.domain.user.repository.UserRepository;
-import ru.golikov.notes.domain.util.UserMapper;
+import ru.golikov.notes.util.UserMapper;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

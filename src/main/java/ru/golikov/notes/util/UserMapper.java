@@ -1,4 +1,4 @@
-package ru.golikov.notes.domain.util;
+package ru.golikov.notes.util;
 
 import org.springframework.security.core.GrantedAuthority;
 import ru.golikov.notes.domain.role.entity.Role;

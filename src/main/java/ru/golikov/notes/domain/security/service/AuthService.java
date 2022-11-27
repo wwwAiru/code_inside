@@ -16,7 +16,7 @@ import ru.golikov.notes.domain.security.model.UserDetailsImpl;
 import ru.golikov.notes.domain.user.dto.UserDto;
 import ru.golikov.notes.domain.user.entity.User;
 import ru.golikov.notes.domain.user.service.UserService;
-import ru.golikov.notes.domain.util.UserMapper;
+import ru.golikov.notes.util.UserMapper;
 
 @Slf4j
 @Service

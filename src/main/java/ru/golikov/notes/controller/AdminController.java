@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.golikov.notes.domain.user.dto.UserDto;
 import ru.golikov.notes.domain.user.service.UserService;
-import ru.golikov.notes.domain.util.UserMapper;
+import ru.golikov.notes.util.UserMapper;
 
 import java.util.List;
 
