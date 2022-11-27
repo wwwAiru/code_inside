@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -24,4 +26,10 @@ public class UserDto {
     private String email;
 
     private String password;
+
+    @JsonProperty("create_at")
+    private LocalDateTime createAt;
+
+    @JsonProperty("update_at")
+    private LocalDateTime updateAt;
 }
