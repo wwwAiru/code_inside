@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -32,4 +33,6 @@ public class UserDto {
 
     @JsonProperty("update_at")
     private LocalDateTime updateAt;
+
+    private List<String> roles;
 }
