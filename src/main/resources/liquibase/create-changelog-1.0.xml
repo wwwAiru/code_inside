@@ -104,10 +104,30 @@
 
     <changeSet id="add_roles" author="a.golikov">
         <insert tableName="roles">
-            <column name="role" value="USER"/>
+            <column name="role" value="ROLE_ADMIN"/>
         </insert>
         <insert tableName="roles">
-            <column name="role" value="ADMIN"/>
+            <column name="role" value="ROLE_USER"/>
+        </insert>
+    </changeSet>
+
+
+    <changeSet id="add_admin" author="a.golikov">
+        <insert tableName="users">
+            <column name="first_name" value="Super"/>
+            <column name="last_name" value="User"/>
+            <column name="middle_name" value="Admin"/>
+            <column name="email" value="admin@mail.ru"/>
+            <column name="password" value="$2a$10$vWufNV.jPVKK2WK6NS4UiOSlfH747ZxSVBobP1cqiG.81rSaTD2fC"/>
+            <column name="is_active" value="true"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="1"/>
+        </insert>
+        <insert tableName="user_roles">
+            <column name="user_id" value="1"/>
+            <column name="role_id" value="2"/>
         </insert>
     </changeSet>
 
