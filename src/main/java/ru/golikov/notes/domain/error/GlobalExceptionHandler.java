@@ -3,23 +3,23 @@ package ru.golikov.notes.domain.error;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import ru.golikov.notes.domain.error.dto.ErrorDetailsDto;
 import ru.golikov.notes.domain.error.exception.NotFoundException;
 import ru.golikov.notes.domain.error.exception.UserRegistrationException;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(NotFoundException.class)
 	public ResponseEntity<?> notFoundException(NotFoundException ex, WebRequest request) {
 		ErrorDetailsDto errorDetailsDto = ErrorDetailsDto.builder()
-				.timestamp(new Date())
+				.timestamp(LocalDateTime.now())
 				.message(ex.getMessage())
 				.details(request.getDescription(false))
 				.build();
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(UserRegistrationException.class)
 	public ResponseEntity<?> userRegistrationException(UserRegistrationException ex, WebRequest request) {
 		ErrorDetailsDto errorDetailsDto = ErrorDetailsDto.builder()
-				.timestamp(new Date())
+				.timestamp(LocalDateTime.now())
 				.message(ex.getMessage())
 				.details(request.getDescription(false))
 				.build();
@@ -39,7 +39,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> globalExceptionHandler(Exception ex, WebRequest request) {
 		ErrorDetailsDto errorDetailsDto = ErrorDetailsDto.builder()
-				.timestamp(new Date())
+				.timestamp(LocalDateTime.now())
 				.message(ex.getMessage())
 				.details(request.getDescription(false))
 				.build();
@@ -49,7 +49,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<?> badCredentialsException(BadCredentialsException ex, WebRequest request) {
 		ErrorDetailsDto errorDetailsDto = ErrorDetailsDto.builder()
-				.timestamp(new Date())
+				.timestamp(LocalDateTime.now())
 				.message(ex.getMessage())
 				.details(request.getDescription(false))
 				.build();
