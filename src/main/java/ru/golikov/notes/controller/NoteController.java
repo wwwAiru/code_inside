@@ -29,4 +29,9 @@ public class NoteController {
         List<NoteDto> allUserNotes = noteService.getAllUserNotes(userDetails);
         return new ResponseEntity<>(allUserNotes, HttpStatus.OK);
     }
+
+    @PutMapping("/edit")
+    public ResponseEntity<NoteDto> editNote(@RequestBody NoteDto noteDto) {
+        return new ResponseEntity<>(noteService.editNote(noteDto), HttpStatus.OK);
+    }
 }
