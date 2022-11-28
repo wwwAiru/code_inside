@@ -8,8 +8,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import ru.golikov.notes.domain.security.jwt.JwtConfigurer;
-import ru.golikov.notes.domain.security.jwt.JwtTokenProvider;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ru.golikov.notes.domain.security.jwt.JwtTokenFilter;
+import ru.golikov.notes.domain.security.model.AuthenticationEntryPointImpl;
 
 @Configuration
 @RequiredArgsConstructor
@@ -24,7 +25,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${endpoints.admin}")
     private String adminUrl;
 
-    private final JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenFilter jwtTokenFilter;
+
+    private final AuthenticationEntryPointImpl authenticationEntryPointImpl;
 
     @Bean
     @Override
@@ -45,6 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(notesUrl).hasAnyRole("ADMIN","USER")
                 .anyRequest().authenticated()
                 .and()
-                .apply(new JwtConfigurer(jwtTokenProvider));
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPointImpl);
     }
 }
