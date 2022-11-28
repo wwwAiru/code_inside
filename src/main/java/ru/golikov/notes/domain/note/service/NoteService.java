@@ -10,10 +10,12 @@ import ru.golikov.notes.util.NoteMapper;
 import ru.golikov.notes.util.UserMapper;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class NoteService {
+
     private final NoteRepository noteRepository;
 
     public NoteDto createNote(NoteDto noteDto, UserDetailsImpl userDetails) {
@@ -25,5 +27,10 @@ public class NoteService {
         note.setUser(UserMapper.toUser(userDetails));
         Note savedNote = noteRepository.save(note);
         return NoteMapper.toDto(savedNote);
+    }
+
+    public List<NoteDto> getAllUserNotes(UserDetailsImpl userDetails) {
+        List<Note> allByUser = noteRepository.findAllByUser(UserMapper.toUser(userDetails));
+        return NoteMapper.toListDto(allByUser);
     }
 }
