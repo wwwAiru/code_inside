@@ -3,6 +3,8 @@ package ru.golikov.notes.domain.note.service;
 import liquibase.repackaged.org.apache.commons.lang3.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.golikov.notes.domain.error.exception.NotFoundException;
 import ru.golikov.notes.domain.note.dto.NoteDto;
@@ -13,7 +15,6 @@ import ru.golikov.notes.util.NoteMapper;
 import ru.golikov.notes.util.UserMapper;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -34,9 +35,9 @@ public class NoteService {
         return NoteMapper.toDto(savedNote);
     }
 
-    public List<NoteDto> getAllUserNotes(UserDetailsImpl userDetails) {
-        List<Note> allByUser = noteRepository.findAllByUser(UserMapper.toUser(userDetails));
-        return NoteMapper.toListDto(allByUser);
+    public Page<NoteDto> getAllUserNotes(UserDetailsImpl userDetails, Integer page, Integer size) {
+        return noteRepository.findAllByUser(UserMapper.toUser(userDetails), PageRequest.of(page, size))
+                .map(NoteMapper::toDto);
     }
 
     public NoteDto editNote(NoteDto noteDto) {
