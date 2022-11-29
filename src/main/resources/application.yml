@@ -9,7 +9,10 @@ spring:
       ddl-auto: validate
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQL95Dialect
-    show-sql: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
   liquibase:
     change-log: classpath:liquibase/create-changelog-1.0.xml
     url: jdbc:postgresql://localhost:5432/notes?serverTimezone=UTC
