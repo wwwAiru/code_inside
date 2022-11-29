@@ -11,13 +11,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import ru.golikov.notes.domain.error.exception.JwtAuthenticationException;
 import ru.golikov.notes.domain.role.entity.Role;
 import ru.golikov.notes.domain.user.entity.User;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
