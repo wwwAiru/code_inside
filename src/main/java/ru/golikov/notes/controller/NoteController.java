@@ -1,15 +1,22 @@
 package ru.golikov.notes.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.envers.AuditReader;
+import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.golikov.notes.domain.note.dto.NoteDto;
+import ru.golikov.notes.domain.note.entity.Note;
 import ru.golikov.notes.domain.note.repository.NoteRepository;
 import ru.golikov.notes.domain.note.service.NoteService;
 import ru.golikov.notes.domain.security.model.UserDetailsImpl;
+
+import javax.persistence.EntityManager;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,7 +25,7 @@ public class NoteController {
 
     private final NoteService noteService;
 
-    private final NoteRepository noteRepository;
+    private final AuditReader auditReader;
 
     @PostMapping("/create")
     public ResponseEntity<NoteDto> createNote(@RequestBody NoteDto noteDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -43,5 +50,12 @@ public class NoteController {
     public ResponseEntity<?> deleteNote(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         noteService.deleteNote(id, userDetails);
         return new ResponseEntity<>(String.format("Note with id = %d deleted", id), HttpStatus.OK);
+    }
+
+    @GetMapping("/audit")
+    public ResponseEntity<List> getNotesAudit() {
+        AuditQuery auditQuery = auditReader.createQuery().forRevisionsOfEntity(Note.class, false, true);
+        List resultList = auditQuery.getResultList();
+        return new ResponseEntity<>(resultList, HttpStatus.OK);
     }
 }
