@@ -8,7 +8,6 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 import ru.golikov.notes.domain.error.dto.ErrorDetailsDto;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -25,7 +24,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest httpServletRequest,
                          HttpServletResponse httpServletResponse,
-                         AuthenticationException e) throws IOException, ServletException {
+                         AuthenticationException e) throws IOException {
         httpServletResponse.setStatus(SC_FORBIDDEN);
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         String message;
