@@ -57,4 +57,15 @@ public class NoteService {
             throw new NotFoundException(String.format("Note with id = %d not found", noteDto.getId()));
         }
     }
+
+    public void deleteNote(Long id, UserDetailsImpl userDetails) {
+        Optional<Note> note = noteRepository.findByIdAndUser(id, UserMapper.toUser(userDetails));
+        if (note.isPresent()) {
+            noteRepository.deleteById(id);
+            log.info(String.format("note with id = %d deleted", id));
+        } else {
+            log.warn(String.format("Can't delete note with id = %d, note not found", id));
+            throw new NotFoundException(String.format("Cant delete note with id = %d, note not found", id));
+        }
+    }
 }

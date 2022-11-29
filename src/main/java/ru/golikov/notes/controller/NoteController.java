@@ -34,4 +34,10 @@ public class NoteController {
     public ResponseEntity<NoteDto> editNote(@RequestBody NoteDto noteDto) {
         return new ResponseEntity<>(noteService.editNote(noteDto), HttpStatus.OK);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteNote(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        noteService.deleteNote(id, userDetails);
+        return new ResponseEntity<>(String.format("Note with id = %d deleted", id), HttpStatus.OK);
+    }
 }
