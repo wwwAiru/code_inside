@@ -14,7 +14,6 @@ import ru.golikov.notes.domain.security.dto.TokenDto;
 import ru.golikov.notes.domain.security.jwt.JwtTokenProvider;
 import ru.golikov.notes.domain.security.model.UserDetailsImpl;
 import ru.golikov.notes.domain.user.dto.UserDto;
-import ru.golikov.notes.domain.user.entity.User;
 import ru.golikov.notes.domain.user.service.UserService;
 import ru.golikov.notes.util.UserMapper;
 
@@ -31,11 +30,10 @@ public class AuthService {
 
     public TokenDto getToken(LoginDto loginDto) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
-            User user = userService.findByEmail(loginDto.getEmail());
+            Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword()));
             return TokenDto.builder()
-                    .email(user.getEmail())
-                    .token(jwtTokenProvider.createToken(user))
+                    .email(loginDto.getEmail())
+                    .token(jwtTokenProvider.createToken(UserMapper.toUser((UserDetailsImpl) authenticate.getPrincipal())))
                     .build();
         } catch (AuthenticationException e) {
             log.warn("Invalid email or password. User: {}", loginDto.getEmail());
