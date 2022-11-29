@@ -60,6 +60,14 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="foreign_notes" author="a.golikov">
+        <addForeignKeyConstraint baseTableName="notes"
+                                 baseColumnNames="user_id"
+                                 constraintName="fk_note_owner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+
     <changeSet id="create_table_roles" author="a.golikov">
         <createTable tableName="roles">
             <column name="id" type="bigint" autoIncrement="true" >
