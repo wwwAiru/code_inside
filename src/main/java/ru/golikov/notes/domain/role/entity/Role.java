@@ -1,6 +1,7 @@
 package ru.golikov.notes.domain.role.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.golikov.notes.domain.user.entity.User;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @Table(name = "roles")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Role {
 
     @Id
@@ -30,4 +32,9 @@ public class Role {
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private List<User> userEntities;
+
+    public Role(String role) {
+        this.role = role;
+    }
+
 }

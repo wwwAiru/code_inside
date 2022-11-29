@@ -51,6 +51,9 @@ public class UserMapper {
         User user = new User();
         user.setId(userDetails.getId());
         user.setEmail(userDetails.getEmail());
+        user.setRoles(userDetails.getAuthorities().stream()
+                .map(role -> new Role(role.getAuthority()))
+                .collect(Collectors.toList()));
         return user;
     }
 }
