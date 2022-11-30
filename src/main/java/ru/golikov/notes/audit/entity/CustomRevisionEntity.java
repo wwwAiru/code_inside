@@ -1,4 +1,4 @@
-package ru.golikov.notes.domain.note.entity;
+package ru.golikov.notes.audit.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,7 +25,7 @@ public class CustomRevisionEntity {
     @GeneratedValue
     @RevisionNumber
     @JsonProperty("revision_id")
-    private int id;
+    private Long id;
 
     @RevisionTimestamp
     private Date timestamp;
