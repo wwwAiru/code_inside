@@ -1,5 +1,8 @@
 package ru.golikov.notes.domain.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +22,9 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 @NoArgsConstructor
-@Audited
+@Audited(withModifiedFlag = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(value = {"hibernateLazyInitializer", "handler"})
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -48,14 +53,17 @@ public class User {
     private LocalDateTime updateAt;
 
     @Column(name = "is_active")
+    @JsonIgnore
     private boolean isActive;
 
     @OneToMany(mappedBy = "user")
+    @NotAudited
     private List<Note> noteEntities;
 
-    @NotAudited
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    @JsonIgnore
+    @NotAudited
     private List<Role> roles;
 }
