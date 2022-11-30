@@ -20,6 +20,9 @@ spring:
     password: postgres
     driver-class-name: org.postgresql.Driver
     enabled: true
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 
 endpoints:
   notes: /notes/**
