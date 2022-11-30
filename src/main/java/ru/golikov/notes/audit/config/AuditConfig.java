@@ -1,4 +1,4 @@
-package ru.golikov.notes.config;
+package ru.golikov.notes.audit.config;
 
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReader;
@@ -10,10 +10,8 @@ import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @RequiredArgsConstructor
-public class Config {
-
+public class AuditConfig {
     private final EntityManagerFactory entityManagerFactory;
-
 
     @Bean
     AuditReader auditReader() {
