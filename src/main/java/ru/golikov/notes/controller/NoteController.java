@@ -2,7 +2,7 @@ package ru.golikov.notes.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReader;
-import org.hibernate.envers.AuditReaderFactory;
+import org.hibernate.envers.query.AuditEntity;
 import org.hibernate.envers.query.AuditQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -11,11 +11,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.golikov.notes.domain.note.dto.NoteDto;
 import ru.golikov.notes.domain.note.entity.Note;
-import ru.golikov.notes.domain.note.repository.NoteRepository;
 import ru.golikov.notes.domain.note.service.NoteService;
 import ru.golikov.notes.domain.security.model.UserDetailsImpl;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
 @RestController
@@ -53,9 +51,14 @@ public class NoteController {
     }
 
     @GetMapping("/audit")
-    public ResponseEntity<List> getNotesAudit() {
-        AuditQuery auditQuery = auditReader.createQuery().forRevisionsOfEntity(Note.class, false, true);
+    public ResponseEntity<List> getNotesAudit(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        AuditQuery auditQuery = auditReader.createQuery().forRevisionsOfEntity(Note.class, false, true)
+                .add(AuditEntity.property("user_id").eq(userDetails.getId()))
+                .addProjection(AuditEntity.revisionType())
+                .addProjection(AuditEntity.id())
+                .addProjection(AuditEntity.selectEntity(false));
         List resultList = auditQuery.getResultList();
+        resultList.forEach(System.out::println);
         return new ResponseEntity<>(resultList, HttpStatus.OK);
     }
 }
