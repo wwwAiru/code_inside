@@ -1,8 +1,11 @@
 package ru.golikov.notes.domain.user.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import ru.golikov.notes.domain.note.entity.Note;
 import ru.golikov.notes.domain.role.entity.Role;
 
@@ -14,7 +17,9 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
+@Audited
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -48,6 +53,7 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Note> noteEntities;
 
+    @NotAudited
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
