@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -26,4 +27,17 @@ public class NoteDto {
 
     @JsonProperty("author")
     private String email;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NoteDto noteDto = (NoteDto) o;
+        return id.equals(noteDto.id) && title.equals(noteDto.title) && body.equals(noteDto.body);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, body);
+    }
 }
