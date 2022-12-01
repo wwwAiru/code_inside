@@ -116,7 +116,6 @@ public class UserService {
         return user;
     }
 
-
     public void deleteUser(Long id) {
         try {
             userRepository.deleteById(id);
