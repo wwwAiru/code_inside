@@ -1,4 +1,4 @@
-package ru.golikov.notes.audit.entity;
+package ru.golikov.notes.domain.audit.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.hibernate.envers.RevisionEntity;
 import org.hibernate.envers.RevisionNumber;
 import org.hibernate.envers.RevisionTimestamp;
-import ru.golikov.notes.audit.config.CustomListener;
+import ru.golikov.notes.domain.audit.config.CustomListener;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -1,4 +1,4 @@
-package ru.golikov.notes.audit.service;
+package ru.golikov.notes.domain.audit.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

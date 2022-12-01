@@ -1,4 +1,4 @@
-package ru.golikov.notes.audit.config;
+package ru.golikov.notes.domain.audit.config;
 
 import lombok.RequiredArgsConstructor;
 import org.hibernate.envers.AuditReader;
