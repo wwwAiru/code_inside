@@ -43,6 +43,13 @@ public class NoteService {
         return savedNoteDto;
     }
 
+    public NoteDto findById(Long id, UserDetailsImpl userDetails) {
+        Optional<Note> note = noteRepository.findByIdAndUser(id, UserMapper.toUser(userDetails));
+        if (note.isPresent()) {
+            return NoteMapper.toDto(note.get());
+        } else throw new NotFoundException(String.format("Note with id = %d not found", id));
+    }
+
     public Page<NoteDto> getAllUserNotes(UserDetailsImpl userDetails, Integer page, Integer size) {
         return noteRepository.findAllByUser(UserMapper.toUser(userDetails), PageRequest.of(page, size))
                 .map(NoteMapper::toDto);
