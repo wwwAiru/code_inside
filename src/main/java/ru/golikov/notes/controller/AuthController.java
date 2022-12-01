@@ -1,5 +1,6 @@
 package ru.golikov.notes.controller;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,17 +25,20 @@ public class AuthController {
 
     private final UserService userService;
 
+    @ApiOperation(value = "Зарегистрировать пользователя", notes = "Возвращает зарегистрированного пользователя")
     @PostMapping("/auth/register")
     public ResponseEntity<UserDto> registerUser(@Valid @RequestBody UserDto userDto) {
         UserDto user = userService.createUser(userDto);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Залогиниться (получить токен авторизации)", notes = "Возвращает токен авторизации")
     @PostMapping("/auth/login")
     public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto) {
         return new ResponseEntity<>(authService.getToken(loginDto), HttpStatus.OK);
     }
 
+    @ApiOperation(value = "Сменить пароль", notes = "При успешной смене пароля возвращает 'Password changed'")
     @PutMapping("/auth/password/change")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDto changePasswordDto) {
         authService.changePassword(changePasswordDto);
