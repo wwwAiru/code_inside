@@ -31,7 +31,7 @@ public class UserService {
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public void createUser(UserDto userDto) {
+    public UserDto createUser(UserDto userDto) {
         User user = userRepository.findByEmail(userDto.getEmail());
         if (user == null) {
             User newUser = new User();
@@ -47,8 +47,9 @@ public class UserService {
             newUser.setRoles(roleEntities);
             newUser.setCreateAt(LocalDateTime.now());
             newUser.setUpdateAt(LocalDateTime.now());
-            userRepository.save(newUser);
+            User savedUser = userRepository.save(newUser);
             log.info("User {} created", userDto.getEmail());
+            return UserMapper.toDto(savedUser);
         } else {
             throw new UserRegistrationException(String.format("User with email: %s already exists", userDto.getEmail()));
         }
