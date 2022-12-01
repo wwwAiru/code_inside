@@ -14,6 +14,8 @@ import ru.golikov.notes.domain.security.service.AuthService;
 import ru.golikov.notes.domain.user.dto.UserDto;
 import ru.golikov.notes.domain.user.service.UserService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -23,18 +25,18 @@ public class AuthController {
     private final UserService userService;
 
     @PostMapping("/auth/register")
-    public ResponseEntity<?> registerUser(@RequestBody UserDto userDto) {
-        userService.createUser(userDto);
-        return new ResponseEntity<>(String.format("User %s created", userDto.getEmail()), HttpStatus.CREATED);
+    public ResponseEntity<UserDto> registerUser(@Valid @RequestBody UserDto userDto) {
+        UserDto user = userService.createUser(userDto);
+        return new ResponseEntity<>(user, HttpStatus.CREATED);
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto) {
+    public ResponseEntity<TokenDto> login(@Valid @RequestBody LoginDto loginDto) {
         return new ResponseEntity<>(authService.getToken(loginDto), HttpStatus.OK);
     }
 
     @PutMapping("/auth/password/change")
-    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDto changePasswordDto) {
         authService.changePassword(changePasswordDto);
         return new ResponseEntity<>("Password changed", HttpStatus.OK);
     }
