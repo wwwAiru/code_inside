@@ -23,6 +23,10 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
 
 endpoints:
   notes: /notes/**
