@@ -3,7 +3,6 @@ package ru.golikov.notes.domain.user.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +19,6 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
 @Audited(withModifiedFlag = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
