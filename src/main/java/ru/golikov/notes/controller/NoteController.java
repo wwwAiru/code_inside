@@ -39,7 +39,7 @@ public class NoteController {
 
     @PutMapping(value = "/edit", consumes="application/json")
     public ResponseEntity<NoteDto> editNote(@RequestBody NoteDto noteDto) {
-        return new ResponseEntity<>(noteService.editNote(noteDto), HttpStatus.OK);
+        return new ResponseEntity<>(noteService.updateNote(noteDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
