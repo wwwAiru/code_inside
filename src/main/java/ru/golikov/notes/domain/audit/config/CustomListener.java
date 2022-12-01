@@ -1,9 +1,9 @@
-package ru.golikov.notes.audit.config;
+package ru.golikov.notes.domain.audit.config;
 
 import org.hibernate.envers.RevisionListener;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import ru.golikov.notes.audit.entity.CustomRevisionEntity;
+import ru.golikov.notes.domain.audit.entity.CustomRevisionEntity;
 
 
 public class CustomListener implements RevisionListener {
