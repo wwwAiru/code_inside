@@ -10,47 +10,48 @@ import ru.golikov.notes.audit.service.AuditService;
 import ru.golikov.notes.domain.note.dto.NoteDto;
 import ru.golikov.notes.domain.note.service.NoteService;
 import ru.golikov.notes.domain.security.model.UserDetailsImpl;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/notes")
+@RequestMapping(value = "/notes")
 public class NoteController {
 
     private final NoteService noteService;
 
     private final AuditService auditService;
 
-    @PostMapping("/create")
-    public ResponseEntity<NoteDto> createNote(@RequestBody NoteDto noteDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        NoteDto note = noteService.createNote(noteDto, userDetails);
-        return new ResponseEntity<>(note, HttpStatus.CREATED);
+    @PostMapping(value = "/create", consumes="application/json")
+    public ResponseEntity<NoteDto> createNote(@RequestBody NoteDto noteDto,
+                                              @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return new ResponseEntity<>(noteService.createNote(noteDto, userDetails), HttpStatus.CREATED);
     }
 
     @GetMapping("/all")
     public ResponseEntity<Page<NoteDto>> getAllUserNotes(@RequestParam Integer page,
                                                          @RequestParam Integer size,
-                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                         @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Page<NoteDto> allUserNotes = noteService.getAllUserNotes(userDetails, page, size);
         return new ResponseEntity<>(allUserNotes, HttpStatus.OK);
     }
 
-    @PutMapping("/edit")
+    @PutMapping(value = "/edit", consumes="application/json")
     public ResponseEntity<NoteDto> editNote(@RequestBody NoteDto noteDto) {
         return new ResponseEntity<>(noteService.editNote(noteDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteNote(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<?> deleteNote(@RequestParam Long id, @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails) {
         noteService.deleteNote(id, userDetails);
         return new ResponseEntity<>(String.format("Note with id = %d deleted", id), HttpStatus.OK);
     }
 
-    @GetMapping("/audit/{id}")
-    public ResponseEntity<List<?>> getNotesAudit(@PathVariable Long id,
+    @GetMapping("/audit")
+    public ResponseEntity<List<?>> getNotesAudit(@RequestParam Long id,
                                                  @RequestParam boolean fetchChanges,
-                                                 @AuthenticationPrincipal UserDetailsImpl userDetails) {
+                                                 @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<?> notesRevById = auditService.getNotesRevById(id, fetchChanges, userDetails);
         return new ResponseEntity<>(notesRevById, HttpStatus.OK);
     }
