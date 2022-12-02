@@ -3,7 +3,10 @@ package ru.golikov.notes.domain.note.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import ru.golikov.notes.AbstractSpringBootTest;
+import ru.golikov.notes.domain.error.exception.NotFoundException;
 import ru.golikov.notes.domain.note.dto.NoteDto;
 import ru.golikov.notes.domain.note.entity.Note;
 import ru.golikov.notes.domain.note.repository.NoteRepository;
@@ -13,9 +16,11 @@ import ru.golikov.notes.util.TestUsersUtil;
 import ru.golikov.notes.util.UserMapper;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -41,11 +46,35 @@ class NoteServiceTest extends AbstractSpringBootTest {
 
     @Test
     void findById() {
+        Long nodeId = 1L;
+        UserDetailsImpl userDetails = TestUsersUtil.getUserDetails();
+        User user = UserMapper.toUser(userDetails);
+        Note found = new Note(1L, "title", "body", any(), any(), user);
+        Optional<Note> noteOptional = Optional.of(found);
+        when(noteRepository.findByIdAndUser(nodeId, user)).thenReturn(noteOptional);
+        assertThat(noteService.findById(nodeId, userDetails))
+                .isEqualTo(NoteDto.builder().id(1L).title("title").body("body").build());
+    }
+    @Test
+    void findById_NotFoundException() {
+        Long nodeId = 555L;
+        UserDetailsImpl userDetails = TestUsersUtil.getUserDetails();
+        User user = UserMapper.toUser(userDetails);
+        when(noteRepository.findByIdAndUser(nodeId, user)).thenReturn(Optional.of(new Note()));
+        NotFoundException exception = assertThrows(NotFoundException.class,
+                () -> noteService.findById(nodeId, userDetails));
+        assertEquals("Note with id = 555 not found", exception.getMessage());
     }
 
-    @Test
-    void getAllUserNotes() {
-    }
+//    @Test
+//    void getAllUserNotes() {
+//        int page = 1;
+//        int size = 1;
+//        UserDetailsImpl userDetails = TestUsersUtil.getUserDetails();
+//        User user = UserMapper.toUser(userDetails);
+//        Page<Note> pageableNotes = null;
+//        when(noteRepository.findAllByUser(user, PageRequest.of(page, size))).thenReturn(pageableNotes);
+//    }
 
     @Test
     void updateNote() {
