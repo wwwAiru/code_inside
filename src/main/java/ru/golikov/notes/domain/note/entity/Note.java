@@ -1,6 +1,7 @@
 package ru.golikov.notes.domain.note.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "notes")
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
