@@ -65,7 +65,9 @@ public class NoteService {
             note.setTitle(noteDto.getTitle());
             note.setBody(noteDto.getBody());
             Note savedNote = noteRepository.save(note);
-            return NoteMapper.toDto(savedNote);
+            NoteDto savedNoteDto = NoteMapper.toDto(savedNote);
+            Objects.requireNonNull(cacheManager.getCache("notes")).put(savedNoteDto, savedNoteDto);
+            return savedNoteDto;
         } else {
             log.warn("Note with id = {} not found", noteDto.getId());
             throw new NotFoundException(String.format("Note with id = %d not found", noteDto.getId()));
