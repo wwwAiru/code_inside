@@ -1,6 +1,5 @@
 package ru.golikov.notes.domain.note.service;
 
-import liquibase.repackaged.org.apache.commons.lang3.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +43,7 @@ public class NoteService {
     }
 
     public NoteDto findById(Long id, UserDetailsImpl userDetails) {
-        Optional<Note> note = noteRepository.findByIdAndUser(id, UserMapper.toUser(userDetails));
+        Optional<Note> note = noteRepository.findByIdAndUserId(id, userDetails.getId());
         if (note.isPresent()) {
             return NoteMapper.toDto(note.get());
         } else throw new NotFoundException(String.format("Note with id = %d not found", id));
@@ -58,16 +57,13 @@ public class NoteService {
     @Cacheable("notes")
     @SneakyThrows
     public NoteDto updateNote(NoteDto noteDto) {
-        Optional<Note> noteOpt = noteRepository.findById(noteDto.getId());
+        Optional<Note> noteOpt = noteRepository.findByIdAndUserId(noteDto.getId(), noteDto.getUserId());
         if (noteOpt.isPresent()) {
             Note note = noteOpt.get();
-            if (!StringUtils.isEmpty(noteDto.getTitle())) {
-                note.setTitle(noteDto.getTitle());
-            }
-            if (!StringUtils.isEmpty(noteDto.getBody())) {
-                note.setBody(noteDto.getBody());
-            }
+            Objects.requireNonNull(cacheManager.getCache("notes")).evict(NoteMapper.toDto(note));
             note.setUpdateAt(LocalDateTime.now());
+            note.setTitle(noteDto.getTitle());
+            note.setBody(noteDto.getBody());
             Note savedNote = noteRepository.save(note);
             return NoteMapper.toDto(savedNote);
         } else {
@@ -77,7 +73,7 @@ public class NoteService {
     }
 
     public void deleteNote(Long noteId, UserDetailsImpl userDetails) {
-        Optional<Note> note = noteRepository.findByIdAndUser(noteId, UserMapper.toUser(userDetails));
+        Optional<Note> note = noteRepository.findByIdAndUserId(noteId, userDetails.getId());
         if (note.isPresent()) {
             noteRepository.deleteById(noteId);
             Objects.requireNonNull(cacheManager.getCache("notes")).evict(NoteMapper.toDto(note.get()));

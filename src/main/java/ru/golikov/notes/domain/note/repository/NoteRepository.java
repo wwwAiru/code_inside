@@ -13,5 +13,5 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     @EntityGraph(attributePaths = {"user"})
     Page<Note> findAllByUser(User user, Pageable pageable);
 
-    Optional<Note> findByIdAndUser(Long id, User user);
+    Optional<Note> findByIdAndUserId(Long id, Long user_id);
 }

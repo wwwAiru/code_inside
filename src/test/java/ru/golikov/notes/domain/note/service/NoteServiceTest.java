@@ -3,8 +3,6 @@ package ru.golikov.notes.domain.note.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import ru.golikov.notes.AbstractSpringBootTest;
 import ru.golikov.notes.domain.error.exception.NotFoundException;
 import ru.golikov.notes.domain.note.dto.NoteDto;
@@ -46,23 +44,23 @@ class NoteServiceTest extends AbstractSpringBootTest {
 
     @Test
     void findById() {
-        Long nodeId = 1L;
+        Long noteId = 1L;
         UserDetailsImpl userDetails = TestUsersUtil.getUserDetails();
         User user = UserMapper.toUser(userDetails);
         Note found = new Note(1L, "title", "body", any(), any(), user);
         Optional<Note> noteOptional = Optional.of(found);
-        when(noteRepository.findByIdAndUser(nodeId, user)).thenReturn(noteOptional);
-        assertThat(noteService.findById(nodeId, userDetails))
+        when(noteRepository.findByIdAndUserId(noteId, userDetails.getId())).thenReturn(noteOptional);
+        assertThat(noteService.findById(noteId, userDetails))
                 .isEqualTo(NoteDto.builder().id(1L).title("title").body("body").build());
     }
     @Test
     void findById_NotFoundException() {
-        Long nodeId = 555L;
+        Long noteId = 555L;
         UserDetailsImpl userDetails = TestUsersUtil.getUserDetails();
-        User user = UserMapper.toUser(userDetails);
-        when(noteRepository.findByIdAndUser(nodeId, user)).thenReturn(Optional.of(new Note()));
+        when(noteRepository.findByIdAndUserId(noteId, userDetails.getId()))
+                .thenReturn(Optional.of(new Note()));
         NotFoundException exception = assertThrows(NotFoundException.class,
-                () -> noteService.findById(nodeId, userDetails));
+                () -> noteService.findById(noteId, userDetails));
         assertEquals("Note with id = 555 not found", exception.getMessage());
     }
 

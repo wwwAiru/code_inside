@@ -28,16 +28,19 @@ public class NoteDto {
     @JsonProperty("author")
     private String email;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long userId;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NoteDto noteDto = (NoteDto) o;
-        return id.equals(noteDto.id) && title.equals(noteDto.title) && body.equals(noteDto.body);
+        return id.equals(noteDto.id) && title.equals(noteDto.title) && body.equals(noteDto.body) && userId.equals(noteDto.userId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, body);
+        return Objects.hash(id, title, body, userId);
     }
 }

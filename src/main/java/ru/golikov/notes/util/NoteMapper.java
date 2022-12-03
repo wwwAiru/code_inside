@@ -15,6 +15,7 @@ public class NoteMapper {
                 .createAt(note.getCreateAt())
                 .updateAt(note.getUpdateAt())
                 .email(note.getUser().getEmail())
+                .userId(note.getUser().getId())
                 .build();
     }
 

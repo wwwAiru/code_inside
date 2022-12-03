@@ -46,9 +46,10 @@ public class NoteController {
         return new ResponseEntity<>(allUserNotes, HttpStatus.OK);
     }
 
-    @ApiOperation(value = "Отредактировать заметку", notes = "отредактированную заметку")
+    @ApiOperation(value = "Отредактировать заметку", notes = "Возвращает отредактированную заметку")
     @PutMapping(value = "/edit", consumes="application/json")
-    public ResponseEntity<NoteDto> editNote(@RequestBody NoteDto noteDto) {
+    public ResponseEntity<NoteDto> editNote(@RequestBody NoteDto noteDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        noteDto.setUserId(userDetails.getId());
         return new ResponseEntity<>(noteService.updateNote(noteDto), HttpStatus.OK);
     }
 
