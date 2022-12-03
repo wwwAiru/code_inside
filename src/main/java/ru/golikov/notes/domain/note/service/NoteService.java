@@ -55,7 +55,6 @@ public class NoteService {
     }
 
     @Cacheable("notes")
-    @SneakyThrows
     public NoteDto updateNote(NoteDto noteDto) {
         Optional<Note> noteOpt = noteRepository.findByIdAndUserId(noteDto.getId(), noteDto.getUserId());
         if (noteOpt.isPresent()) {
@@ -64,8 +63,7 @@ public class NoteService {
             note.setUpdateAt(LocalDateTime.now());
             note.setTitle(noteDto.getTitle());
             note.setBody(noteDto.getBody());
-            Note savedNote = noteRepository.save(note);
-            NoteDto savedNoteDto = NoteMapper.toDto(savedNote);
+            NoteDto savedNoteDto = NoteMapper.toDto(noteRepository.save(note));
             Objects.requireNonNull(cacheManager.getCache("notes")).put(savedNoteDto, savedNoteDto);
             return savedNoteDto;
         } else {
