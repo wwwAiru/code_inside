@@ -41,7 +41,7 @@ public class AdminController {
     @ApiOperation(value = "Удалить пользователя", notes = "Возвращает 'пользователь с id = {id} удалён'")
     @DeleteMapping("/user/delete")
     public ResponseEntity<?> deleteUser(@RequestParam Long id) {
-        userService.deleteUser(id);
-        return new ResponseEntity<>(String.format("User with id = %d deleted",id), HttpStatus.OK);
+        String resp = userService.deleteUser(id);
+        return new ResponseEntity<>(resp, HttpStatus.OK);
     }
 }
