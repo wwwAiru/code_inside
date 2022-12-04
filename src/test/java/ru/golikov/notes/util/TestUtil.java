@@ -9,19 +9,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class TestUtil {
 
     public static UserDetailsImpl createUserDetails(){
+        LocalDateTime dateTime = LocalDateTime.now();
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         return UserDetailsImpl.builder()
                 .id(1L)
-                .createAt(null)
-                .updateAt(null)
+                .createAt(dateTime)
+                .updateAt(dateTime)
                 .firstName("Test")
                 .lastName("User")
                 .middleName("Userovich")
@@ -38,8 +37,9 @@ public class TestUtil {
     }
 
     public static Note createNote() {
-        return createNoteByParams(1L, "title", "body", null,
-                null, UserMapper.toUser(createUserDetails())
+        LocalDateTime dateTime = LocalDateTime.now();
+        return createNoteByParams(1L, "title", "body", dateTime,
+                dateTime, UserMapper.toUser(createUserDetails())
         );
     }
 
