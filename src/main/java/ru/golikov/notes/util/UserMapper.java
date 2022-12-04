@@ -56,4 +56,17 @@ public class UserMapper {
                 .collect(Collectors.toList()));
         return user;
     }
+
+    public static User toUser(UserDto userDto) {
+        User user = new User();
+        if (userDto.getId() != null) user.setId(userDto.getId());
+        if (userDto.getEmail() != null) user.setEmail(userDto.getEmail());
+        if (userDto.getFirstName() != null) user.setFirstName(userDto.getFirstName());
+        if (userDto.getLastName() != null) user.setLastName(userDto.getLastName());
+        if (userDto.getMiddleName() != null) user.setMiddleName(userDto.getMiddleName());
+        if (userDto.getCreateAt() != null) user.setCreateAt(userDto.getCreateAt());
+        if (userDto.getUpdateAt() != null) user.setCreateAt(userDto.getUpdateAt());
+        user.setActive(userDto.isActive());
+        return user;
+    }
 }
