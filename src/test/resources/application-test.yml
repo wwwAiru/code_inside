@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:notes?serverTimezone=UTC
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
+endpoints:
+  notes: /notes/**
+  auth: /auth/**
+  admin: /admin/**
+
+jwt:
+  token:
+    secret: ${TOKEN_SECRET:qwerty123}
+    expired: ${TOKEN_EXPIRED:36000000}
