@@ -103,19 +103,6 @@ public class UserService {
         return user;
     }
 
-    public User updateUserPassword(UserDto userDto) {
-        User user = userRepository.findByEmail(userDto.getEmail());
-        if (user == null) {
-            log.warn(String.format("user with email = %s not found", userDto.getEmail()));
-            throw new NotFoundException(String.format("user with email = %s not found", userDto.getEmail()));
-        } else {
-            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            userRepository.save(user);
-            log.info(String.format("user %s update password", user.getEmail()));
-        }
-        return user;
-    }
-
     public void deleteUser(Long id) {
         try {
             userRepository.deleteById(id);
