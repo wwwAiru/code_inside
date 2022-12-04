@@ -12,9 +12,11 @@ import ru.golikov.notes.domain.audit.config.CustomListener;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
+@Table(name = "custom_revision_entity")
 @RevisionEntity(CustomListener.class)
 @Getter
 @Setter
