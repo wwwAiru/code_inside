@@ -56,8 +56,8 @@ public class NoteController {
     @ApiOperation(value = "Удалить заметку", notes = "Возвращает строку с описанием, какая заметка удалена")
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteNote(@RequestParam Long id, @ApiIgnore @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        noteService.deleteNote(id, userDetails);
-        return new ResponseEntity<>(String.format("Note with id = %d deleted", id), HttpStatus.OK);
+        String resp = noteService.deleteNote(id, userDetails);
+        return new ResponseEntity<>(resp, HttpStatus.OK);
     }
 
     @ApiOperation(value = "История изменений заметки", notes = "Возвращает ревизии заметки по её id")
