@@ -27,6 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 class NoteServiceTest extends AbstractSpringBootTest {
@@ -44,9 +45,11 @@ class NoteServiceTest extends AbstractSpringBootTest {
         User user = UserMapper.toUser(userDetails);
         Note note = new Note(null, "title", "body", null, null, any());
         Note saved = new Note(1L, "title", "body", localDateTime, localDateTime, user);
+        NoteDto expectedNoteDto = NoteDto.builder().id(1L).title("title").body("body").createAt(localDateTime)
+                .updateAt(localDateTime).email("test@user.ru").userId(1L).build();
         when(noteRepository.save(note)).thenReturn(saved);
         assertThat(noteService.createNote(NoteDto.builder().title("title").body("body").build(),
-                userDetails)).isEqualTo(NoteDto.builder().id(1L).title("title").body("body").build());
+                userDetails)).isEqualTo(expectedNoteDto);
     }
 
     @Test
@@ -66,12 +69,13 @@ class NoteServiceTest extends AbstractSpringBootTest {
                         .userId(1L)
                         .build());
     }
+
     @Test
     void findById_NotFoundException() {
         Long noteId = 555L;
         UserDetailsImpl userDetails = TestUtil.createUserDetails();
         when(noteRepository.findByIdAndUserId(noteId, userDetails.getId()))
-                .thenReturn(Optional.of(new Note()));
+                .thenReturn(Optional.empty());
         NotFoundException exception = assertThrows(NotFoundException.class,
                 () -> noteService.findById(noteId, userDetails));
         assertEquals("Note with id = 555 not found", exception.getMessage());
@@ -92,8 +96,51 @@ class NoteServiceTest extends AbstractSpringBootTest {
         assertThat(noteService.getAllUserNotes(userDetails, page, size).toList()).isEqualTo(noteDtoList);
     }
 
+    @Test
+    void updateNote() {
+        UserDetailsImpl userDetails = TestUtil.createUserDetails();
+        Note note = TestUtil.createNote();
+        NoteDto noteDtoBefore = NoteMapper.toDto(note);
+        when(noteRepository.findByIdAndUserId(noteDtoBefore.getId(), noteDtoBefore.getUserId())).thenReturn(Optional.of(note));
+        note.setBody("New Body");
+        note.setUpdateAt(LocalDateTime.now());
+        when(noteRepository.save(note)).thenReturn(note);
+        NoteDto noteDto = NoteDto.builder()
+                .id(1L)
+                .title("title")
+                .email(userDetails.getEmail())
+                .userId(userDetails.getId())
+                .body("New body")
+                .build();
+        assertThat(noteService.updateNote(noteDto)).isEqualTo(noteDto);
+    }
+
+    @Test
+    void updateNote_NotFoundException() {
+        NoteDto noteDto = NoteMapper.toDto(TestUtil.createNote());
+        UserDetailsImpl userDetails = TestUtil.createUserDetails();
+        when(noteRepository.findByIdAndUserId(noteDto.getId(), userDetails.getId()))
+                .thenReturn(Optional.empty());
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> noteService.updateNote(noteDto));
+        assertEquals("Note with id = 1 not found", exception.getMessage());
+    }
 
     @Test
     void deleteNote() {
+        Note note = TestUtil.createNote();
+        NoteDto noteDto = NoteMapper.toDto(TestUtil.createNote());
+        UserDetailsImpl userDetails = TestUtil.createUserDetails();
+        when(noteRepository.findByIdAndUserId(noteDto.getId(), userDetails.getId())).thenReturn(Optional.of(note));
+        doNothing().when(noteRepository).deleteById(1L);
+        assertThat(noteService.deleteNote(1L, userDetails)).isEqualTo("note with id = 1, userId = 1 deleted");
+    }
+
+    @Test
+    void deleteNote_NotFoundException() {
+        NoteDto noteDto = NoteMapper.toDto(TestUtil.createNote());
+        UserDetailsImpl userDetails = TestUtil.createUserDetails();
+        when(noteRepository.findByIdAndUserId(noteDto.getId(), userDetails.getId())).thenReturn(Optional.empty());
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> noteService.deleteNote(1L, userDetails));
+        assertEquals("Cant delete note with id = 1, userId = 1, note not found", exception.getMessage());
     }
 }
