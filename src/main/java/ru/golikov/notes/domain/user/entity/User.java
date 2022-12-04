@@ -14,6 +14,7 @@ import ru.golikov.notes.domain.role.entity.Role;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -65,5 +66,9 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     @JsonIgnore
     @NotAudited
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
+
+    public void addRole(Role role) {
+        if (role != null) roles.add(role);
+    }
 }
