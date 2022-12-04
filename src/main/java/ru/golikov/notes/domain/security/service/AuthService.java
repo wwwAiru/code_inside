@@ -41,7 +41,7 @@ public class AuthService {
         }
     }
 
-    public void changePassword(ChangePasswordDto changePasswordDto) {
+    public String changePassword(ChangePasswordDto changePasswordDto) {
         try {
             Authentication authenticate = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(changePasswordDto.getEmail(), changePasswordDto.getPassword()));
             UserDetailsImpl principal = (UserDetailsImpl) authenticate.getPrincipal();
@@ -49,6 +49,7 @@ public class AuthService {
             userDto.setPassword(changePasswordDto.getNewPassword());
             userService.editUser(userDto);
             log.info("Password for User: {} changed", changePasswordDto.getEmail());
+            return String.format("Password for User: %s changed", changePasswordDto.getEmail());
         } catch (AuthenticationException e) {
             log.warn("Invalid email or password. User: {}", changePasswordDto.getEmail());
             throw new BadCredentialsException("Invalid email or password");
