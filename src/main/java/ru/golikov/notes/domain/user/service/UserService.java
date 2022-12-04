@@ -15,7 +15,6 @@ import ru.golikov.notes.domain.user.repository.UserRepository;
 import ru.golikov.notes.util.UserMapper;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,21 +31,15 @@ public class UserService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserDto createUser(UserDto userDto) {
-        User user = userRepository.findByEmail(userDto.getEmail());
-        if (user == null) {
-            User newUser = new User();
-            Role role = roleRepository.findByRole("ROLE_USER").get();
-            List<Role> roleEntities = new ArrayList<>();
-            roleEntities.add(role);
-            newUser.setActive(true);
-            newUser.setEmail(userDto.getEmail());
-            newUser.setFirstName(userDto.getFirstName());
-            newUser.setLastName(userDto.getLastName());
-            newUser.setMiddleName(userDto.getMiddleName());
+        Optional<User> user = userRepository.findByEmail(userDto.getEmail());
+        if (user.isEmpty()) {
+            User newUser = UserMapper.toUser(userDto);
             newUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
-            newUser.setRoles(roleEntities);
             newUser.setCreateAt(LocalDateTime.now());
             newUser.setUpdateAt(LocalDateTime.now());
+            newUser.setActive(true);
+            Optional<Role> roleUser = roleRepository.findByRole("ROLE_USER");
+            roleUser.ifPresent(newUser::addRole);
             User savedUser = userRepository.save(newUser);
             log.info("User {} created", userDto.getEmail());
             return UserMapper.toDto(savedUser);
@@ -69,7 +62,7 @@ public class UserService {
             }
         }
         if (userDto.getPassword() != null) {
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
         user.setActive(userDto.isActive());
         user.setEmail(userDto.getEmail());
@@ -95,12 +88,12 @@ public class UserService {
     }
 
     public User findByEmail(String email) {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (!user.isPresent()) {
             log.warn(String.format("user with email = %s not found", email));
             throw new NotFoundException(String.format("user with email = %s not found", email));
         }
-        return user;
+        return user.get();
     }
 
     public void deleteUser(Long id) {
