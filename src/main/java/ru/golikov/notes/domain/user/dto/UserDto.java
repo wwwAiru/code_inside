@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Builder
@@ -53,4 +54,17 @@ public class UserDto {
     private boolean isActive;
 
     private List<String> roles;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserDto userDto = (UserDto) o;
+        return isActive == userDto.isActive && id.equals(userDto.id) && firstName.equals(userDto.firstName) && lastName.equals(userDto.lastName) && middleName.equals(userDto.middleName) && email.equals(userDto.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, middleName, email, isActive);
+    }
 }
