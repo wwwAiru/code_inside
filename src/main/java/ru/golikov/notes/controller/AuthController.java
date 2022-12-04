@@ -41,7 +41,7 @@ public class AuthController {
     @ApiOperation(value = "Сменить пароль", notes = "При успешной смене пароля возвращает 'Password changed'")
     @PutMapping("/auth/password/change")
     public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordDto changePasswordDto) {
-        authService.changePassword(changePasswordDto);
-        return new ResponseEntity<>("Password changed", HttpStatus.OK);
+        String resp = authService.changePassword(changePasswordDto);
+        return new ResponseEntity<>(resp, HttpStatus.OK);
     }
 }
