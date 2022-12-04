@@ -66,20 +66,21 @@ public class NoteService {
             Objects.requireNonNull(cacheManager.getCache("notes")).put(savedNoteDto, savedNoteDto);
             return savedNoteDto;
         } else {
-            log.warn("Note with id = {} not found", noteDto.getId());
+            log.warn("note with id = {}, userId = {}, note not found", noteDto.getId(), noteDto.getId());
             throw new NotFoundException(String.format("Note with id = %d not found", noteDto.getId()));
         }
     }
 
-    public void deleteNote(Long noteId, UserDetailsImpl userDetails) {
+    public String deleteNote(Long noteId, UserDetailsImpl userDetails) {
         Optional<Note> note = noteRepository.findByIdAndUserId(noteId, userDetails.getId());
         if (note.isPresent()) {
             noteRepository.deleteById(noteId);
             Objects.requireNonNull(cacheManager.getCache("notes")).evict(NoteMapper.toDto(note.get()));
-            log.info(String.format("note with noteId = %d deleted", noteId));
+            log.info("note with id = {}, userId = {}, deleted", noteId, userDetails.getId());
+            return String.format("note with id = %d, userId = %d deleted", noteId, userDetails.getId());
         } else {
-            log.warn(String.format("Can't delete note with noteId = %d, note not found", noteId));
-            throw new NotFoundException(String.format("Cant delete note with noteId = %d, note not found", noteId));
+            log.warn("Can't delete note with id = {}, userId = {}, note not found", noteId, userDetails.getId());
+            throw new NotFoundException(String.format("Cant delete note with id = %d, userId = %d, note not found", noteId, userDetails.getId()));
         }
     }
 }
