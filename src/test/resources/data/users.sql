@@ -1,0 +1,5 @@
+insert into public.users (id, first_name, last_name, middle_name, email, password, create_at, update_at, is_active)
+values  (1, 'Super', 'User', 'Admin', 'admin@mail.ru', '$2a$10$vWufNV.jPVKK2WK6NS4UiOSlfH747ZxSVBobP1cqiG.81rSaTD2fC', '2022-12-01 19:52:24.902946', '2022-12-01 19:52:24.902946', true),
+        (2, 'Дмитрий', 'Иванов', 'Сергеевич', 'sergeevich@aa.ru', '$2a$10$SbyMAVMKY1l9DncsyF8lYeErblb6kUp9DvejuWiD6EcStE7JZWUHi', '2022-12-01 19:52:52.787985', '2022-12-01 19:52:52.787985', true),
+        (3, 'Алексей', 'Юнаев', 'Викторович', 'unling@aa.ru', '$2a$10$oc8AZ0G3bdwb/aMlGWIa9O.r3tt4n4qJXc.Yiu9H82FlS0h5a2YFm', '2022-12-01 19:59:31.379503', '2022-12-01 19:59:31.379503', true),
+        (8, 'Алексей', 'Юнаев', 'Викторович', 'unlingd@aa.ru', '$2a$10$Xl7zt00GoIaP2GRAm1j6peyCzo5p99WXpWwXua3lEodhX8iCwujnS', '2022-12-04 15:25:56.528359', '2022-12-04 17:32:40.758693', false);
