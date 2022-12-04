@@ -44,6 +44,7 @@ public class UserService {
             log.info("User {} created", userDto.getEmail());
             return UserMapper.toDto(savedUser);
         } else {
+            log.warn("User with email: {} already exists", userDto.getEmail());
             throw new UserRegistrationException(String.format("User with email: %s already exists", userDto.getEmail()));
         }
     }
@@ -61,14 +62,12 @@ public class UserService {
                 user.setRoles(roles);
             }
         }
-        if (userDto.getPassword() != null) {
-            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        }
         user.setActive(userDto.isActive());
-        user.setEmail(userDto.getEmail());
-        user.setFirstName(userDto.getFirstName());
-        user.setLastName(userDto.getLastName());
-        user.setMiddleName(userDto.getMiddleName());
+        if (userDto.getPassword() != null) user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        if(userDto.getEmail() != null) user.setEmail(userDto.getEmail());
+        if(userDto.getFirstName() != null) user.setFirstName(userDto.getFirstName());
+        if(userDto.getLastName() != null) user.setLastName(userDto.getLastName());
+        if(userDto.getMiddleName() != null) user.setMiddleName(userDto.getMiddleName());
         user.setUpdateAt(LocalDateTime.now());
         User savedUser = userRepository.save(user);
         return UserMapper.toDto(savedUser);
@@ -81,7 +80,7 @@ public class UserService {
     public User findById(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isEmpty()) {
-            log.warn(String.format("user with id = %d not found", id));
+            log.warn("user with id = {} not found", id);
             throw new NotFoundException(String.format("user with id = %d not found", id));
         }
         return user.get();
@@ -89,20 +88,21 @@ public class UserService {
 
     public User findByEmail(String email) {
         Optional<User> user = userRepository.findByEmail(email);
-        if (!user.isPresent()) {
-            log.warn(String.format("user with email = %s not found", email));
+        if (user.isEmpty()) {
+            log.warn("user with email = {} not found", email);
             throw new NotFoundException(String.format("user with email = %s not found", email));
         }
         return user.get();
     }
 
-    public void deleteUser(Long id) {
+    public String deleteUser(Long id) {
         try {
             userRepository.deleteById(id);
         } catch (Exception e) {
-            log.warn(String.format("Can't delete user with id = %d, user not found", id));
-            throw new NotFoundException(String.format("Cant delete user with id = %d, user not found", id));
+            log.warn(String.format("can't delete user with id = %d, user not found", id));
+            throw new NotFoundException(String.format("can't delete user with id = %d, user not found", id));
         }
-        log.info(String.format("user with id = %d deleted", id));
+        log.info("user with id = {} deleted", id);
+        return String.format("user with id = %d deleted", id);
     }
 }
