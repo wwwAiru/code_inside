@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.golikov.notes.domain.security.jwt.JwtTokenFilter;
 import ru.golikov.notes.domain.security.model.AuthenticationEntryPointImpl;
@@ -27,7 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenFilter jwtTokenFilter;
 
-    private final AuthenticationEntryPointImpl authenticationEntryPointImpl;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
     @Override
@@ -50,6 +51,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPointImpl);
+                .authenticationEntryPoint(authenticationEntryPoint);
     }
 }

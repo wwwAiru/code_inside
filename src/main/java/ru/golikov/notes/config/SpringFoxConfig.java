@@ -15,7 +15,7 @@ import java.util.List;
 @Configuration
 public class SpringFoxConfig {
 
-    public static final String AUTHORIZATION_HEADER = "Authorization";
+    private static final String AUTHORIZATION_HEADER = "Authorization";
 
     private ApiInfo apiInfo() {
         return new ApiInfo("Notes API",
